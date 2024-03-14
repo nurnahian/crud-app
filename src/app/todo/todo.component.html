@@ -4,27 +4,27 @@
             <h1 class="text-center md-3 todo-header">Todo List</h1>
             <hr>
             <div class="col-12 d-flex align-items-center justify-content-between">
-                <input class="col-8 todo-input" placeholder="Enter text ..." type="text">
-                <button type="submit" class="col-3 btn btn-primary">Add</button>
+                <input class="col-8 todo-input" placeholder="Enter text ..." type="text" name="text" [(ngModel)]="todoValue">
+                <button type="submit" class="col-3 btn btn-primary" (click)="addTodo()">Add</button>
             </div>
             <!-- Todo OnGoing -->
             <div class="todo-list mt-3">
                 <h5>Todo List</h5>
-                <div class="col-12 d-flex todo-single align-center">
-                    <input type="checkbox" class="col-1 todo-checkbox">
-                    <p class="col-9">Todo Item</p>
-                    <button type="button" class="btn btn-outline-light text-danger col-1 del-btn">
+                <div class="col-12 d-flex todo-single align-center" *ngFor="let todo of todoList;let i=index;">
+                    <input type="checkbox" class="col-1 todo-checkbox" [(ngModel)]="todo.value" (ngModelChange)="ChangeTodo(i)">
+                    <p class="col-9">{{todo.content}}</p>
+                    <button type="button" class="btn btn-outline-light text-danger col-1 del-btn" (click)="openModal(content,i,'todoList')">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
             </div>
             <!-- Todo Finish -->
-            <div class="todo-list mt-3">
+            <div class="todo-list mt-3" *ngIf="finishedList.length>0">
                 <h5>Finish List</h5>
-                <div class="col-12 d-flex todo-single align-center">
-                    <input type="checkbox" class="col-1 todo-checkbox">
-                    <p class="col-9">Todo Item</p>
-                    <button type="button" class="btn btn-outline-light text-danger col-1 del-btn">
+                <div class="col-12 d-flex todo-single align-center" *ngFor="let todo of finishedList;let i=index;">
+                    <input type="checkbox" class="col-1 todo-checkbox"  [(ngModel)]="todo.value" (ngModelChange)="ChangeFinished(i)">
+                    <p class="col-9">{{todo.content}}</p>
+                    <button type="button" class="btn btn-outline-light text-danger col-1 del-btn" (click)="openModal(content,i,'finishedList')">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
@@ -32,3 +32,25 @@
         </div>
     </div>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-title">Delete</h4>
+        <button
+            type="button"
+            class="btn-close"
+            aria-describedby="modal-title"
+            (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <p>
+            <strong>Are you sure you want to delete this task?</strong>
+        </p>
+        
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
+    </div>
+</ng-template>
